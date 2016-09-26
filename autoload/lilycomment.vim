@@ -14,7 +14,7 @@ let g:loaded_lilycomment = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-funciton! lilycomment#insert()
+function! lilycomment#insert()
     echo 'hoge'
 endfunction
 
