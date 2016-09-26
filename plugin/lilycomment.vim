@@ -14,7 +14,7 @@ let g:loaded_lilycomment = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-cammand! -nargs=0 LilyComment call lilycomment#insert()
+command! -nargs=0 LilyComment call lilycomment#insert()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
