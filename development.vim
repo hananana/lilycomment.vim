@@ -6,15 +6,11 @@
 
 scriptencoding utf-8
 
-if exists('g:loaded_lilycomment')
-    finish
-endif
-let g:loaded_lilycomment = 1
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=0 LilyComment call lilycomment#insert()
+so autoload/lilycomment.vim
+so plugin/lilycomment.vim
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
