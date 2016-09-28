@@ -17,22 +17,25 @@ set cpo&vim
 function! lilycomment#insert()
     let currentRow = nextnonblank(line('.'))
     let splited = split(getline(currentRow), ' ')
-
-    if index(splited, 'class') == 1
-        call s:doInsertNormalComment(currentRow)
-        return
-    endif
-
     let current = getline('.')
+
     if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
         call s:doInsertMethodComment(currentRow, s:detectVaribleNames(currentRow))
-        return
+    else
+        call s:doInsertNormalComment(currentRow)
     endif
-
-    call s:doInsertNormalComment(currentRow)
+    call cursor(currentRow + 1, len(s:getSpacesAndSlashes(currentRow)) + 1)
+    startinsert
 endfunction
 
 function! s:doInsertNormalComment(row)
+    let insertRow = a:row - 1
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . "</summary>")
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . " ")
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . "<summary>")
+endfunction
+
+function! s:getSpacesAndSlashes(row)
     let slashes = "/// "
     let itr = 0
     let spaces = ''
@@ -40,12 +43,7 @@ function! s:doInsertNormalComment(row)
         let spaces = spaces . ' '
         let itr += 1
     endwhile
-    let insertRow = a:row - 1
-    call append(insertRow, spaces . slashes . "</summary>")
-    call append(insertRow, spaces . slashes . " ")
-    call append(insertRow, spaces . slashes . "<summary>")
-    call cursor(a:row + 1, indent(a:row) + len(slashes) + 1)
-    :startinsert
+    return spaces . slashes
 endfunction
 
 function! s:doInsertMethodComment(row, variables)
@@ -60,14 +58,17 @@ function! s:detectVaribleNames(row)
     let variables = []
     for s in splited
         let words = split(s, ' ')
+    
         for w in words
             if w[0] == ' '
                 let w = w[1:]
             endif
-            echo w
+            if index(words, w) == 1
+                call add(variables, w)
+            endif
         endfor
     endfor
-
+    return variables
 endfunction
 
 let &cpo = s:save_cpo

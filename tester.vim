@@ -11,7 +11,6 @@ set cpo&vim
 
 so autoload/lilycomment.vim
 so plugin/lilycomment.vim
-
 call lilycomment#insert()
 
 let &cpo = s:save_cpo
