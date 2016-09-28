@@ -5,4 +5,7 @@ class Test
     {
 
     }
+    public void Hoge(int fuga,string foo)
+    {
+    }
 }

@@ -25,7 +25,7 @@ function! lilycomment#insert()
 
     let current = getline('.')
     if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
-        call s:doInsertMethodComment(currentRow, s:detectVaribleName(row))
+        call s:doInsertMethodComment(currentRow, s:detectVaribleNames(currentRow))
         return
     endif
 
@@ -51,9 +51,24 @@ endfunction
 function! s:doInsertMethodComment(row, variables)
 endfunction
 
-function! s:detectVaribleName(row)
-endfunction
+function! s:detectVaribleNames(row)
+    let target = getline(a:row)
+    let leftBracketsIndex = stridx(target, '(')
+    let rightBracketsIndex = stridx(target, ')')
+    let innerStr = target[leftBracketsIndex + 1 : rightBracketsIndex - len(target) - 1]
+    let splited = split(innerStr, ',')
+    let variables = []
+    for s in splited
+        let words = split(s, ' ')
+        for w in words
+            if w[0] == ' '
+                let w = w[1:]
+            endif
+            echo w
+        endfor
+    endfor
 
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
