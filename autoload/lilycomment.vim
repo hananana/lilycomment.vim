@@ -35,15 +35,15 @@ endfunction
 function! s:doInsert(row)
     let slashes = "/// "
     let itr = 0
-    let space = ''
+    let spaces = ''
     while  itr < indent(a:row)
-        let space = space . ' '
+        let spaces = spaces . ' '
         let itr += 1
     endwhile
     let insertRow = a:row - 1
-    call append(insertRow, space . slashes . "</summary>")
-    call append(insertRow, space . slashes . " ")
-    call append(insertRow, space . slashes . "<summary>")
+    call append(insertRow, spaces . slashes . "</summary>")
+    call append(insertRow, spaces . slashes . " ")
+    call append(insertRow, spaces . slashes . "<summary>")
     call cursor(a:row + 1, indent(a:row) + len(slashes) + 1)
 endfunction
 
