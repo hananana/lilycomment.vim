@@ -45,6 +45,7 @@ function! s:doInsert(row)
     call append(insertRow, spaces . slashes . " ")
     call append(insertRow, spaces . slashes . "<summary>")
     call cursor(a:row + 1, indent(a:row) + len(slashes) + 1)
+    :startinsert
 endfunction
 
 let &cpo = s:save_cpo
