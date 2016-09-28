@@ -15,50 +15,35 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! lilycomment#insert()
-    let currentRow = s:getTargetRow()
-    let splited = split(s:getTargetString(), ' ')
+    let currentRow = nextnonblank(line('.'))
+    let splited = split(getline(currentRow), ' ')
 
     if index(splited, 'class') == 1
-        "         echo 'this row is class definition'
         call s:doInsert(currentRow)
         return
     endif
 
     let current = getline('.')
     if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
-        "         echo 'this row is method definition'
         call s:doInsert(currentRow)
         return
     endif
 
-    "     echo 'this row is NOT difinition'
     call s:doInsert(currentRow)
 endfunction
 
-function! s:getTargetString()
-    let row = line('.')
-    while empty(getline(row))
-        let row += 1
-    endwhile
-    return getline(row)
-endfunction
-
-function! s:getTargetRow()
-    let row = line('.')
-    while empty(getline(row))
-        let row += 1
-    endwhile
-    return row
-endfunction
-
 function! s:doInsert(row)
-    call cursor(a:row, 0)
-    "wip 
-    execute "normal! <underscore>"
-    
-"     call append(a:row - 1, "/// </summary>")
-"     call append(a:row - 1, "/// ")
-"     call append(a:row - 1, "/// <summary>")
+    let slashes = "/// "
+    let itr = 0
+    let space = ''
+    while  itr < indent(a:row)
+        let space = space . ' '
+        let itr += 1
+    endwhile
+    let insertRow = a:row - 1
+    call append(insertRow, space . slashes . "</summary>")
+    call append(insertRow, space . slashes)
+    call append(insertRow, space . slashes . "<summary>")
 endfunction
 
 let &cpo = s:save_cpo
