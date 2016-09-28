@@ -19,20 +19,20 @@ function! lilycomment#insert()
     let splited = split(getline(currentRow), ' ')
 
     if index(splited, 'class') == 1
-        call s:doInsert(currentRow)
+        call s:doInsertNormalComment(currentRow)
         return
     endif
 
     let current = getline('.')
     if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
-        call s:doInsert(currentRow)
+        call s:doInsertMethodComment(currentRow, s:detectVaribleName(row))
         return
     endif
 
-    call s:doInsert(currentRow)
+    call s:doInsertNormalComment(currentRow)
 endfunction
 
-function! s:doInsert(row)
+function! s:doInsertNormalComment(row)
     let slashes = "/// "
     let itr = 0
     let spaces = ''
@@ -47,6 +47,13 @@ function! s:doInsert(row)
     call cursor(a:row + 1, indent(a:row) + len(slashes) + 1)
     :startinsert
 endfunction
+
+function! s:doInsertMethodComment(row, variables)
+endfunction
+
+function! s:detectVaribleName(row)
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
