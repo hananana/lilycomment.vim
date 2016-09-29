@@ -15,16 +15,16 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! lilycomment#insert()
-    let currentRow = nextnonblank(line('.'))
-    let splited = split(getline(currentRow), ' ')
+    let targetRow = nextnonblank(line('.'))
+    let splited = split(getline(targetRow), ' ')
     let current = getline('.')
 
     if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
-        call s:doInsertMethodComment(currentRow, s:detectVaribleNames(currentRow))
+        call s:doInsertMethodComment(targetRow, s:getVariableNames(targetRow))
     else
-        call s:doInsertNormalComment(currentRow)
+        call s:doInsertNormalComment(targetRow)
     endif
-    call cursor(currentRow + 1, len(s:getSpacesAndSlashes(currentRow)) + 1)
+    call cursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
     startinsert
 endfunction
 
@@ -47,28 +47,17 @@ function! s:getSpacesAndSlashes(row)
 endfunction
 
 function! s:doInsertMethodComment(row, variables)
+
 endfunction
 
-function! s:detectVaribleNames(row)
+function! s:getVariableNames(row)
+    echo 'hoge'
     let target = getline(a:row)
     let leftBracketsIndex = stridx(target, '(')
     let rightBracketsIndex = stridx(target, ')')
     let innerStr = target[leftBracketsIndex + 1 : rightBracketsIndex - len(target) - 1]
-    let splited = split(innerStr, ',')
-    let variables = []
-    for s in splited
-        let words = split(s, ' ')
-    
-        for w in words
-            if w[0] == ' '
-                let w = w[1:]
-            endif
-            if index(words, w) == 1
-                call add(variables, w)
-            endif
-        endfor
-    endfor
-    return variables
+    let candidates = filter(split(innerStr, '\v( |,)'), {idx, val -> val != ''})
+    return filter(candidates, {idx, val -> idx % 2 != 0})
 endfunction
 
 let &cpo = s:save_cpo
