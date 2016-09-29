@@ -17,9 +17,9 @@ set cpo&vim
 function! lilycomment#insert()
     let targetRow = nextnonblank(line('.'))
     let splited = split(getline(targetRow), ' ')
-    let current = getline('.')
+    let targetString = getline('.')
 
-    if stridx(current, '(') >= 0 && stridx(current, ')') >= 0
+    if s:isMethod(targetString)
         call s:doInsertMethodComment(targetRow, s:getVariableNames(targetRow))
     else
         call s:doInsertNormalComment(targetRow)
@@ -28,11 +28,28 @@ function! lilycomment#insert()
     startinsert
 endfunction
 
+function! s:isMethod(targetString)
+    return stridx(a:targetString, '(') >= 0 && stridx(a:targetString, ')') >= 0
+endfunction
+
 function! s:doInsertNormalComment(row)
     let insertRow = a:row - 1
     call append(insertRow, s:getSpacesAndSlashes(a:row) . "</summary>")
     call append(insertRow, s:getSpacesAndSlashes(a:row) . " ")
     call append(insertRow, s:getSpacesAndSlashes(a:row) . "<summary>")
+endfunction
+
+function! s:doInsertMethodComment(row, variables)
+    call s:doInsertNormalComment(a:row)
+    let insertRow = a:row + 2
+    for val in a:variables
+        let idx = index(a:variables, val)
+        let str = s:getSpacesAndSlashes(a:row) . "<param name=\"" . val . "\"> </param>"
+        call append(insertRow + idx, str)
+    endfor
+    if s:returnable(a:row)
+        call append(insertRow + len(a:variables), s:getSpacesAndSlashes(a:row) . "<returns> </returns>")
+    endif
 endfunction
 
 function! s:getSpacesAndSlashes(row)
@@ -46,16 +63,6 @@ function! s:getSpacesAndSlashes(row)
     return spaces . slashes
 endfunction
 
-function! s:doInsertMethodComment(row, variables)
-    call s:doInsertNormalComment(a:row)
-    let insertRow = a:row + 2
-    for val in a:variables
-        let idx = index(a:variables, val)
-        let str = s:getSpacesAndSlashes(a:row) . "<param name=\"" . val . "\"> </param>"
-        call append(insertRow + idx, str)
-    endfor
-endfunction
-
 function! s:getVariableNames(row)
     let target = getline(a:row)
     let leftBracketsIndex = stridx(target, '(')
@@ -63,6 +70,15 @@ function! s:getVariableNames(row)
     let innerStr = target[leftBracketsIndex + 1 : rightBracketsIndex - len(target) - 1]
     let candidates = filter(split(innerStr, '\v( |,)'), {idx, val -> val != ''})
     return filter(candidates, {idx, val -> idx % 2 != 0})
+endfunction
+
+function! s:returnable(row)
+    echo 'st'
+    let target = getline(a:row)
+    let splited = split(target, ' ')
+    let filterd = filter(split(target, ' '), 
+                \{idx, val -> val != 'public' && val != 'private'})
+    return filterd[0] != 'void'
 endfunction
 
 let &cpo = s:save_cpo

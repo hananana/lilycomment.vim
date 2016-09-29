@@ -18,4 +18,13 @@ class Test
     public void Hoge(int fuga,string foo)
     {
     }
+
+    public int something()
+    {
+    }
+
+    private string donothing(int hoho)
+    {
+    }
+
 }
