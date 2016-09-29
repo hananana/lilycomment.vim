@@ -47,11 +47,16 @@ function! s:getSpacesAndSlashes(row)
 endfunction
 
 function! s:doInsertMethodComment(row, variables)
-
+    call s:doInsertNormalComment(a:row)
+    let insertRow = a:row + 2
+    for val in a:variables
+        let idx = index(a:variables, val)
+        let str = s:getSpacesAndSlashes(a:row) . "<param name=\"" . val . "\"> </param>"
+        call append(insertRow + idx, str)
+    endfor
 endfunction
 
 function! s:getVariableNames(row)
-    echo 'hoge'
     let target = getline(a:row)
     let leftBracketsIndex = stridx(target, '(')
     let rightBracketsIndex = stridx(target, ')')
