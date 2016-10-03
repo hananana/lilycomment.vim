@@ -1,0 +1,28 @@
+*lilycomplete.txt* comment plugin for csharp
+
+Version: 1.0
+Author: hananana <hnzw.tkyk@gmail.com>
+Lisense: MIT
+
+CONTENTS					*lilycomment-contents*
+
+Introduction		|lilycomment-introduction|
+Install			|lilycomment-install|
+Interface		|lilycomment-interface|
+  Commands		  |lilycomment-commands|
+  Variables		  |lilycomment-variables|
+    Sources variables	    |lilycomment-sources-variables|
+  Key mappings		  |lilycomment-key-mappings|
+  Functions		  |lilycomment-functions|
+Examples		|lilycomment-examples|
+Sources			|lilycomment-sources|
+  User sources		  |lilycomment-user-sources|
+Create source		|lilycomment-create-source|
+  Source attributes       |lilycomment-source-attributes|
+  Candidate attributes   |lilycomment-candidate-attributes|
+Create filter		|lilycomment-create-filter|
+  Filter attributes       |lilycomment-filter-attributes|
+FILTERS			|lilycomment-filters|
+External sources	|lilycomment-external-sources|
+FAQ			|lilycomment-faq|
+
