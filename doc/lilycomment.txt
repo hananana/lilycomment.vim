@@ -23,7 +23,7 @@ REQUIREMENT                                        *lilycomment-requirement*
 
 This plugin is used lambda function.
 YES! It's function was implemented in Vim 8.0.
-SO YOU NEED TO UPDATE VIM TO 8.0!
+SO YOU NEED TO UPDATE VIM 8.0!
 
 ==============================================================================
 INSTALL                                                *lilycomment-install*

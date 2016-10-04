@@ -19,10 +19,16 @@ class Test
     {
     }
 
+    /// <summary>
+    ///  
+    /// </summary>
     public int something()
     {
     }
 
+    /// <summary>
+    ///  
+    /// </summary>
     private string donothing(int hoho)
     {
     }
