@@ -4,15 +4,15 @@ Version: 1.0
 Author: hananana <hnzw.tkyk@gmail.com>
 Lisense: MIT
 
-CONTENTS			                            		*lilycomment-contents*
+CONTENTS			                       *lilycomment-contents*
 
-Introduction                		|lilycomment-introduction|
-Requirement                         |lilycomment-requirement|
-Install                             |lilycomment-install|
-Commands		                    |lilycomment-commands|
+Introduction                			|lilycomment-introduction|
+Requirement                         		|lilycomment-requirement|
+Install                             		|lilycomment-install|
+Commands		                    	|lilycomment-commands|
 
 ==============================================================================
-INTRODUCTION			                    		*lilycomment-introduction*
+INTRODUCTION			                *lilycomment-introduction*
 
 lilycomment is comment plugin for csharp.
 One day, I searched comment plugin. But the one is not in the net.
