@@ -17,7 +17,7 @@ set cpo&vim
 function! lilycomment#insert()
     let targetRow = nextnonblank(line('.'))
     let splited = split(getline(targetRow), ' ')
-    let targetString = getline('.')
+    let targetString = getline(targetRow)
 
     if s:isMethod(targetString)
         call s:doInsertMethodComment(targetRow, s:getVariableNames(targetRow))
@@ -73,7 +73,6 @@ function! s:getVariableNames(row)
 endfunction
 
 function! s:returnable(row)
-    echo 'st'
     let target = getline(a:row)
     let splited = split(target, ' ')
     let filterd = filter(split(target, ' '), 
