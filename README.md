@@ -46,7 +46,7 @@ public class Hoge
     ///</summary>
     ///<param> foo </param>
     ///<param> bar </param>
-    ///<return> 
+    ///<return> </return>
     string DoSomething(int foo, string bar)
     {
 
