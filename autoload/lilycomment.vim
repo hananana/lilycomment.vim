@@ -14,32 +14,40 @@ let g:loaded_lilycomment = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! lilycomment#insert()
+function! lilycomment#insert() abort
     let targetRow = nextnonblank(line('.'))
-    let splited = split(getline(targetRow), ' ')
     let targetString = getline(targetRow)
 
     if s:isMethod(targetString)
         call s:doInsertMethodComment(targetRow, s:getVariableNames(targetRow))
-    else
+        call s:fixCursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
+    elseif s:isClass(targetString)
         call s:doInsertNormalComment(targetRow)
+        call s:fixCursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
     endif
-    call cursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
-    startinsert
 endfunction
 
-function! s:isMethod(targetString)
+function! s:isMethod(targetString) abort
     return stridx(a:targetString, '(') >= 0 && stridx(a:targetString, ')') >= 0
 endfunction
 
-function! s:doInsertNormalComment(row)
+function! s:isClass(targetString) abort
+    return stridx(a:targetString, 'class') != -1
+endfunction
+    
+function! s:fixCursor(row, col) abort
+    call cursor(a:row, a:col)
+    startinsert
+endfunction
+
+function! s:doInsertNormalComment(row) abort
     let insertRow = a:row - 1
     call append(insertRow, s:getSpacesAndSlashes(a:row) . "</summary>")
     call append(insertRow, s:getSpacesAndSlashes(a:row) . " ")
     call append(insertRow, s:getSpacesAndSlashes(a:row) . "<summary>")
 endfunction
 
-function! s:doInsertMethodComment(row, variables)
+function! s:doInsertMethodComment(row, variables) abort
     call s:doInsertNormalComment(a:row)
     let insertRow = a:row + 2
     for val in a:variables
@@ -52,7 +60,7 @@ function! s:doInsertMethodComment(row, variables)
     endif
 endfunction
 
-function! s:getSpacesAndSlashes(row)
+function! s:getSpacesAndSlashes(row) abort
     let slashes = "/// "
     let itr = 0
     let spaces = ''
@@ -63,7 +71,7 @@ function! s:getSpacesAndSlashes(row)
     return spaces . slashes
 endfunction
 
-function! s:getVariableNames(row)
+function! s:getVariableNames(row) abort
     let target = getline(a:row)
     let leftBracketsIndex = stridx(target, '(')
     let rightBracketsIndex = stridx(target, ')')
@@ -72,7 +80,7 @@ function! s:getVariableNames(row)
     return filter(candidates, {idx, val -> idx % 2 != 0})
 endfunction
 
-function! s:returnable(row)
+function! s:returnable(row) abort
     let target = getline(a:row)
     let splited = split(target, ' ')
     let filterd = filter(split(target, ' '), 
