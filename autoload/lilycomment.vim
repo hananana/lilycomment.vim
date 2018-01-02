@@ -21,7 +21,7 @@ function! lilycomment#insert() abort
     if s:isMethod(targetString)
         call s:doInsertMethodComment(targetRow, s:getVariableNames(targetRow))
         call s:fixCursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
-    elseif s:isClass(targetString)
+    else
         call s:doInsertNormalComment(targetRow)
         call s:fixCursor(targetRow + 1, len(s:getSpacesAndSlashes(targetRow)) + 1)
     endif
@@ -42,9 +42,9 @@ endfunction
 
 function! s:doInsertNormalComment(row) abort
     let insertRow = a:row - 1
-    call append(insertRow, s:getSpacesAndSlashes(a:row) . "</summary>")
-    call append(insertRow, s:getSpacesAndSlashes(a:row) . " ")
-    call append(insertRow, s:getSpacesAndSlashes(a:row) . "<summary>")
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . '</summary>')
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . ' ')
+    call append(insertRow, s:getSpacesAndSlashes(a:row) . '<summary>')
 endfunction
 
 function! s:doInsertMethodComment(row, variables) abort
@@ -52,16 +52,16 @@ function! s:doInsertMethodComment(row, variables) abort
     let insertRow = a:row + 2
     for val in a:variables
         let idx = index(a:variables, val)
-        let str = s:getSpacesAndSlashes(a:row) . "<param name=\"" . val . "\"> </param>"
+        let str = s:getSpacesAndSlashes(a:row) . '<param name=\"' . val . '\"> </param>'
         call append(insertRow + idx, str)
     endfor
     if s:returnable(a:row)
-        call append(insertRow + len(a:variables), s:getSpacesAndSlashes(a:row) . "<returns> </returns>")
+        call append(insertRow + len(a:variables), s:getSpacesAndSlashes(a:row) . '<returns> </returns>')
     endif
 endfunction
 
 function! s:getSpacesAndSlashes(row) abort
-    let slashes = "/// "
+    let slashes = '/// '
     let itr = 0
     let spaces = ''
     while  itr < indent(a:row)
@@ -85,7 +85,7 @@ function! s:returnable(row) abort
     let splited = split(target, ' ')
     let filterd = filter(split(target, ' '), 
                 \{idx, val -> val != 'public' && val != 'private'})
-    return filterd[0] != 'void'
+    return filterd[0] !=? 'void'
 endfunction
 
 let &cpo = s:save_cpo
